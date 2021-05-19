@@ -26,5 +26,5 @@ how to better implement the feature.
   
 ## How To
 
-Please refer to `Main.kt`
+Please refer to [`Main.kt`](./src/Main.kt)
 
