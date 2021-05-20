@@ -1,6 +1,6 @@
 # Decompression Planer (ZHL-16C)
 
-## Discalmer
+## Disclaimer
 
 I publish this in hope for review and comments. At the current state (2021-05-18) please do not base your planning on 
 the given algorithm. If you still do so this would proof Darwin right and eventually leads to natural selection.
