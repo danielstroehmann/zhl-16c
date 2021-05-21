@@ -96,7 +96,7 @@ class Buehlmann(private val dive : Dive) {
 
             // if a diver reached a stop and needs to stay there for a certrain time
             if(metresNextDecoStopp == stepLast.depthEnd) {
-                val intervalStep = 0.06
+                val intervalStep = 0.001
                 var intervalCurrent = 0.0
                 var stepSimulation : Step
 

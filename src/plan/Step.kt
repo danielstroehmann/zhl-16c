@@ -29,9 +29,12 @@ class Step(@Suppress("MemberVisibilityCanBePrivate") val depthStart : Double, va
         }
 
         depth = when (direction) {
+            Direction.Down -> depthEnd - (depthEnd - depthStart) / 2.0
             Direction.Up -> depthStart - (depthStart - depthEnd) / 2.0
-            else -> depthEnd
+            else -> depthStart
         }
+
+
 
     }
 

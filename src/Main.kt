@@ -12,8 +12,8 @@ internal fun main() {
     val gasDecompression = BreathingGas.createNitrox(oxygenInPercent = 50, type = BreathingGasType.Decompression, pO2 = 1.6)
 
     // Define dive plan
-    val step1 = Step(depthStart = 0.0, depthEnd = 40.0, duration = 4.0, breathingGas = gasDefault)
-    val step2 = Step(depthStart = 40.0, depthEnd = 40.0, duration = 20.0, breathingGas = gasDefault)
+    val step1 = Step(depthStart = 0.0, depthEnd = 40.0, duration = 6.0, breathingGas = gasDefault)
+    val step2 = Step(depthStart = 40.0, depthEnd = 40.0, duration = 14.0, breathingGas = gasDefault)
 
     // Configure dive
     val dive = Dive(
