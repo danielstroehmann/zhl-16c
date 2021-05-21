@@ -1,7 +1,5 @@
 package de.stroehmi.diving.zhl16c.environment
 
-import kotlin.math.roundToInt
-
 /**
  * Represents a gas mix for breathing.
  *
@@ -42,12 +40,12 @@ class BreathingGas(oxygen: Int = 21, nitrogen: Int = 100 - oxygen, helium: Int =
         /**
          * Creates a Nitrox mix.
          *
-         * @param oxygen Percent oxygen.
+         * @param oxygenInPercent Percent oxygen.
          * @return EANxx.
          */
-        fun createNitrox(oxygen : Int, type: BreathingGasType, pO2 : Double) : BreathingGas {
-            require(oxygen in 1..100) { "Oxygen content must be greater than 0% and maximum 100%" }
-            return BreathingGas(oxygen, type = type, name = "EAN$oxygen", pO2 = pO2)
+        fun createNitrox(oxygenInPercent : Int, type: BreathingGasType, pO2 : Double) : BreathingGas {
+            require(oxygenInPercent in 1..100) { "Oxygen content must be greater than 0% and maximum 100%" }
+            return BreathingGas(oxygenInPercent, type = type, name = "EAN$oxygenInPercent", pO2 = pO2)
         }
         /**
          * Creates Trimix.

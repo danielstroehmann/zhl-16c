@@ -9,14 +9,22 @@ internal fun main() {
 
     // Configure breathing gases
     val gasDefault = BreathingGas.createAir()
-    val gasDecompression = BreathingGas.createNitrox(50, BreathingGasType.Decompression, pO2 = 1.6)
+    val gasDecompression = BreathingGas.createNitrox(oxygenInPercent = 50, type = BreathingGasType.Decompression, pO2 = 1.6)
 
     // Define dive plan
-    val step1 = Step(0.0, 40.0, 4.0, gasDefault)
-    val step2 = Step(40.0,40.0, 20.0, gasDefault)
+    val step1 = Step(depthStart = 0.0, depthEnd = 40.0, duration = 4.0, breathingGas = gasDefault)
+    val step2 = Step(depthStart = 40.0, depthEnd = 40.0, duration = 20.0, breathingGas = gasDefault)
 
     // Configure dive
-    val dive = Dive(PressureWater.Freshwater, 0, gasDefault, 6.0, 2.0, 0.3, 0.8, name = "Parkhaus Post")
+    val dive = Dive(
+        water = PressureWater.Freshwater,
+        altitude = 0,
+        defaultBreathingGas = gasDefault,
+        ascentSpeed = 6.0,
+        minutesPerGasChange = 2.0,
+        gfLow = 0.3,
+        gfHigh = 0.8,
+        name = "Parkhaus Post")
 
     // add gases and steps to dive plan
     dive.steps.add(step1)
