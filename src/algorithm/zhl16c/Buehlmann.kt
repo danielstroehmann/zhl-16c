@@ -56,7 +56,7 @@ class Buehlmann(private val dive : Dive) {
         val pressureAmbient             = pressure.getAmbientPressure(currentStep.depth)
         val pressureInspiratoryHelium   = calculateInspiratoryPartialPressureGas(pressureAmbient, currentStep.breathingGas.helium)
         val pressureInspiratoryNitrogen = calculateInspiratoryPartialPressureGas(pressureAmbient, currentStep.breathingGas.nitrogen)
-        val compartments : ArrayList<Compartment> = ArrayList()
+        val compartments                = mutableListOf<Compartment>()
 
         for(tissue in halftime.elements) {
             val curPresHelium    = previousStep?.saturation?.find { e-> e.id == tissue.id }?.partialPressureInertHeliumInTissue ?: 0.0
@@ -67,7 +67,6 @@ class Buehlmann(private val dive : Dive) {
             val presAmbTolTot    = calculatePressureAmbientTolerated(partPresInertTot, tissue.a(currentStep.breathingGas, gradientFactor), tissue.b(currentStep.breathingGas, gradientFactor))
             val ceiling          = pressure.getDepth(presAmbTolTot)
             compartments.add(Compartment(tissue.id, newPresHelium, newPresNitrogen, partPresInertTot, presAmbTolTot, ceiling))
-
         }
 
         currentStep.saturation = compartments

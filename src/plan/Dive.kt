@@ -20,9 +20,9 @@ import de.stroehmi.diving.zhl16c.environment.PressureWater
  */
 class Dive(val water: PressureWater, altitude: Int, defaultBreathingGas : BreathingGas = BreathingGas.createAir(), val ascentSpeed : Double = 9.0, val minutesPerGasChange : Double = 2.0, val gfLow: Double, val gfHigh: Double, var name : String = "Dive") {
 
-    internal val air                 = PressureAir(altitude)
+    internal val air        = PressureAir(altitude)
     val breathingGasses     = BreathingGasList(defaultBreathingGas)
-    val steps               = ArrayList<Step>()
+    val steps               = mutableListOf<Step>()
     var cnsTotal : Double   = 0.0
     var otuTotal : Double   = 0.0
 
@@ -31,12 +31,6 @@ class Dive(val water: PressureWater, altitude: Int, defaultBreathingGas : Breath
         require(gfHigh in gfLow..1.0) { "High GF must be between $gfLow (current low GF) and 1.0" }
     }
 
-    /**
-     * Gets current depth of dive plan based on steps. If no steps added will return 0.
-     *
-     */
-    private fun getCurrentDepth() = if(steps.size != 0) steps.last().depthEnd else 0.0
-
     override fun toString(): String {
         var format =    "NAME: $name\n" +
                         "\n" +
@@ -44,11 +38,11 @@ class Dive(val water: PressureWater, altitude: Int, defaultBreathingGas : Breath
                         "CNS: ${"%.2f".format(cnsTotal)}%\n\n" +
                         "GASES:\n\n"
 
-        for(gas in breathingGasses.elements) format += "${gas.toString()}\n"
+        for(gas in breathingGasses.elements) format += "${gas}\n"
 
         format +=   "\n" +
                     "STEPS:\n\n"
-        for(step in steps) format += "${step.toString()}\n"
+        for(step in steps) format += "${step}\n"
 
         return format
     }

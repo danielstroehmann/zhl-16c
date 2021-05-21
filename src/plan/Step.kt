@@ -16,7 +16,7 @@ class Step(@Suppress("MemberVisibilityCanBePrivate") val depthStart : Double, va
     // average depth used for calculation of saturation limits
     val depth : Double
     // saturation levels for tissue compartments
-    var saturation : List<Compartment> = mutableListOf()
+    var saturation = mutableListOf<Compartment>()
 
     init {
 
