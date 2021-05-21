@@ -1,58 +1,19 @@
 package de.stroehmi.diving.zhl16c.algorithm
 /**
  * CNS toxitity reduction factor list.
- *
- * @property elements Reduction factors by minutes on surface after dive.
  */
-internal class CnsHalftimeList(private val elements : Array<CnsHalftime>) {
+internal class CnsHalftimeList() {
+    // key: surface interval in minutes, value: factor to reduce previous CNS
+    private val lookupTable = mapOf( 30 to 0.8, 60 to 0.63, 90 to 0.5, 120 to 0.4, 150 to 0.31, 180 to 0.25, 210 to 0.2, 240 to 0.16, 270 to 0.13, 300 to 0.1, 360 to 0.06, 570 to 0.0 )
+
     /**
      * Calculates remaining CNS toxitity in percent before a subsequent dive.
      *
      * @param surfaceIntervalInMinute Surface interval in minutes.
      * @param cnsPercentageAfterPreviousDive CNS toxitity in percent at the end of previous dive.
      */
-    fun getRemainingCnsPercentageAfterSurfaceInterval(surfaceIntervalInMinute : Int, cnsPercentageAfterPreviousDive: Double) =
-        (elements.find { elem -> elem.surfaceIntervalInMinutes <= surfaceIntervalInMinute }?: elements[0]).reductionFactor * cnsPercentageAfterPreviousDive
-
-    companion object Factory {
-        private val surfaceIntervalInMinutes = arrayListOf<Int>(
-            30,
-            60,
-            90,
-            120,
-            150,
-            180,
-            210,
-            240,
-            270,
-            300,
-            360,
-            570
-        )
-        private val reductionFactor = arrayListOf<Double>(
-            0.8,
-            0.63,
-            0.5,
-            0.4,
-            0.31,
-            0.25,
-            0.2,
-            0.16,
-            0.13,
-            0.1,
-            0.06,
-            0.0
-        )
-
-        init {
-            require(surfaceIntervalInMinutes.size == reductionFactor.size)
-            reductionFactor.sort()
-            surfaceIntervalInMinutes.sort()
-        }
-        /**
-         * Creates a list of all CNS toxitity reduction factors.
-         *
-         */
-        fun create() = CnsHalftimeList(Array(surfaceIntervalInMinutes.size) { no -> CnsHalftime(surfaceIntervalInMinutes[no], reductionFactor[no]) })
+    fun getRemainingCnsPercentageAfterSurfaceInterval(surfaceIntervalInMinute : Int, cnsPercentageAfterPreviousDive: Double) : Double {
+        val key = lookupTable.keys.find { key -> key <= surfaceIntervalInMinute } ?: lookupTable.keys.first()
+        return lookupTable[key]!! * cnsPercentageAfterPreviousDive
     }
 }

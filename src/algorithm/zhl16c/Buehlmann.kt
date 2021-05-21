@@ -13,15 +13,15 @@ import kotlin.math.pow
 @Suppress("JoinDeclarationAndAssignment")
 class Buehlmann(private val dive : Dive) {
     //  Aaturation vapor pressure of water at T=37°C
-    private val psH2O       = 0.063
+    private val psH2O    = 0.063
     // List of default 16 compartments defined in ZHL16-C
-    private val halftime    = CompartmentHalftimeList.create()
+    private val halftime = CompartmentHalftimeList.create()
     // Ambient pressure based on type of water and altitude
-    private val pressure    = PressureAmbient(dive.air, dive.water)
+    private val pressure = PressureAmbient(dive.air, dive.water)
     // Lookup table for otu values
-    private val otuList                 = OtuList.create()
+    private val otuList  = OtuList()
     // Lookup table for cns toxitity
-    private val cnsList             = CnsList.create()
+    private val cnsList  = CnsList()
     // default partial pressure of nitrogen on surface
     private val defaultPartialPressureNitrogenInTissue = 0.75
 
@@ -59,8 +59,8 @@ class Buehlmann(private val dive : Dive) {
         val compartments : ArrayList<Compartment> = ArrayList()
 
         for(tissue in halftime.elements) {
-            val curPresHelium    = if(previousStep is Step) previousStep.saturation.find { e -> e.id == tissue.id }!!.partialPressureInertHeliumInTissue else 0.0
-            val curPresNitrogen  = if(previousStep is Step) previousStep.saturation.find { e -> e.id == tissue.id }!!.partialPressureInertNitrogenInTissue else defaultPartialPressureNitrogenInTissue
+            val curPresHelium    = previousStep?.saturation?.find { e-> e.id == tissue.id }?.partialPressureInertHeliumInTissue ?: 0.0
+            val curPresNitrogen  = previousStep?.saturation?.find { e -> e.id == tissue.id }?.partialPressureInertNitrogenInTissue ?: defaultPartialPressureNitrogenInTissue
             val newPresHelium    = calculatePressureInertGasInTissue(curPresHelium, pressureInspiratoryHelium, tissue.helium, currentStep.duration)
             val newPresNitrogen  = calculatePressureInertGasInTissue(curPresNitrogen, pressureInspiratoryNitrogen, tissue.nitrogen, currentStep.duration)
             val partPresInertTot = newPresHelium + newPresNitrogen
@@ -129,7 +129,7 @@ class Buehlmann(private val dive : Dive) {
      * @param saturation Current Saturation of leading tissue compartment.
      * @return Next decompression stop in metres.
      */
-    private fun calculateNextDecompressionStop(saturation : ArrayList<Compartment>) : Double {
+    private fun calculateNextDecompressionStop(saturation : List<Compartment>) : Double {
         var currentCeiling = 0.0
         var minimumCeiling : Int
         saturation.forEach { e -> if(e.ceiling > currentCeiling) currentCeiling = e.ceiling }

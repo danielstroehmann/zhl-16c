@@ -1,211 +1,38 @@
 package de.stroehmi.diving.zhl16c.algorithm
 /**
  * List of all CNS toxitity levels.
- *
- * @property elements
  */
-internal class CnsList(private val elements : Array<Cns>) {
+internal class CnsList {
+
+    /**
+     * Key: partial pressure oxygen in depth
+     * Pair.first: cns toxitity per minute in %
+     * Pair.second: max. exposure time in min
+     */
+    @Suppress("PrivatePropertyName")
+    private val NOAAtable = mapOf(
+        0.50 to Pair(0.000, -1), 0.60 to Pair(0.140, 714), 0.64 to Pair(0.150, 667), 0.66 to Pair(0.160, 625), 0.68 to Pair(0.170, 588), 0.70 to Pair(0.180, 556), 0.74 to Pair(0.190, 526), 0.76 to Pair(0.200, 500), 0.78 to Pair(0.210, 476),
+        0.80 to Pair(0.220, 455), 0.82 to Pair(0.230, 435), 0.84 to Pair(0.240, 417), 0.86 to Pair(0.250, 400), 0.88 to Pair(0.260, 385), 0.90 to Pair(0.280, 357), 0.92 to Pair(0.290, 345), 0.94 to Pair(0.300, 333), 0.96 to Pair(0.310, 323),
+        0.98 to Pair(0.320, 313), 1.00 to Pair(0.330, 303), 1.02 to Pair(0.350, 286), 1.04 to Pair(0.360, 278), 1.06 to Pair(0.380, 263), 1.08 to Pair(0.400, 250), 1.10 to Pair(0.420, 238), 1.12 to Pair(0.430, 233), 1.14 to Pair(0.430, 233),
+        1.16 to Pair(0.440, 227), 1.18 to Pair(0.460, 217), 1.20 to Pair(0.470, 213), 1.22 to Pair(0.480, 208), 1.24 to Pair(0.510, 196), 1.26 to Pair(0.520, 192), 1.28 to Pair(0.540, 185), 1.30 to Pair(0.560, 179), 1.32 to Pair(0.570, 175),
+        1.34 to Pair(0.600, 167), 1.36 to Pair(0.620, 161), 1.38 to Pair(0.630, 159), 1.40 to Pair(0.650, 154), 1.42 to Pair(0.680, 147), 1.44 to Pair(0.710, 141), 1.46 to Pair(0.740, 135), 1.48 to Pair(0.780, 128), 1.50 to Pair(0.830, 120),
+        1.52 to Pair(0.930, 108), 1.54 to Pair(1.040, 96), 1.56 to Pair(1.190, 84), 1.58 to Pair(1.470, 68), 1.60 to Pair(2.220, 45), 1.62 to Pair(5.000, 20), 1.65 to Pair(6.250, 16), 1.67 to Pair(7.690, 13), 1.70 to Pair(10.00, 10),
+        1.72 to Pair(12.50, 8), 1.74 to Pair(20.00, 5), 1.77 to Pair(25.00, 4), 1.79 to Pair(31.25, 3), 1.80 to Pair(50.00, 2), 1.82 to Pair(100.0, 1)
+    )
     /**
      * Finds best match (safe upper) CNS toxitity level based on partial inspiratory pressure of oxygen.
      *
      * @param partialInspiratoryPressureOxygen Partial inspiratory pressure of oxygen.
      */
-    private fun find(partialInspiratoryPressureOxygen: Double) = elements.find { elem -> elem.partialPressureOxygen > partialInspiratoryPressureOxygen } ?: elements[elements.lastIndex]
+    private fun find(partialInspiratoryPressureOxygen: Double) : Double {
+        val key = NOAAtable.keys.find { elem -> elem > partialInspiratoryPressureOxygen } ?: NOAAtable.keys.last()
+        return NOAAtable[key]!!.first
+    }
     /**
      * Calculates CNS toxitiy percentage.
      *
      * @param partialInspiratoryPressureOxygen Partial inspiratory pressure of oxygen.
      * @param duration Exposure time in minutes.
      */
-    fun calculateCnsPercentage(partialInspiratoryPressureOxygen : Double, duration: Double) = find(partialInspiratoryPressureOxygen = partialInspiratoryPressureOxygen).cnsPercentPerMinute * duration
-
-    companion object Factory {
-        private val partialInspiratoryPressureOxygen: ArrayList<Double> = arrayListOf(
-            0.50,
-            0.60,
-            0.64,
-            0.66,
-            0.68,
-            0.70,
-            0.74,
-            0.76,
-            0.78,
-            0.80,
-            0.82,
-            0.84,
-            0.86,
-            0.88,
-            0.90,
-            0.92,
-            0.94,
-            0.96,
-            0.98,
-            1.00,
-            1.02,
-            1.04,
-            1.06,
-            1.08,
-            1.10,
-            1.12,
-            1.14,
-            1.16,
-            1.18,
-            1.20,
-            1.22,
-            1.24,
-            1.26,
-            1.28,
-            1.30,
-            1.32,
-            1.34,
-            1.36,
-            1.38,
-            1.40,
-            1.42,
-            1.44,
-            1.46,
-            1.48,
-            1.50,
-            1.52,
-            1.54,
-            1.56,
-            1.58,
-            1.60,
-            1.62,
-            1.65,
-            1.67,
-            1.70,
-            1.72,
-            1.74,
-            1.77,
-            1.79,
-            1.80,
-            1.82,
-        )
-        private val cnsPercentPerMinute: ArrayList<Double> = arrayListOf(
-            0.00,
-            0.14,
-            0.15,
-            0.16,
-            0.17,
-            0.18,
-            0.19,
-            0.2,
-            0.21,
-            0.22,
-            0.23,
-            0.24,
-            0.25,
-            0.26,
-            0.28,
-            0.29,
-            0.3,
-            0.31,
-            0.32,
-            0.33,
-            0.35,
-            0.36,
-            0.38,
-            0.4,
-            0.42,
-            0.43,
-            0.43,
-            0.44,
-            0.46,
-            0.47,
-            0.48,
-            0.51,
-            0.52,
-            0.54,
-            0.56,
-            0.57,
-            0.6,
-            0.62,
-            0.63,
-            0.65,
-            0.68,
-            0.71,
-            0.74,
-            0.78,
-            0.83,
-            0.93,
-            1.04,
-            1.19,
-            1.47,
-            2.22,
-            5.00,
-            6.25,
-            7.69,
-            10.00,
-            12.5,
-            20.00,
-            25.00,
-            31.25,
-            50.00,
-            100.00,
-        )
-        private val maximumDurationInMinutes: ArrayList<Int> = arrayListOf(
-            Int.MAX_VALUE,
-            714,
-            667,
-            625,
-            588,
-            556,
-            526,
-            500,
-            476,
-            455,
-            435,
-            417,
-            400,
-            385,
-            357,
-            345,
-            333,
-            323,
-            313,
-            303,
-            286,
-            278,
-            263,
-            250,
-            238,
-            233,
-            233,
-            227,
-            217,
-            213,
-            208,
-            196,
-            192,
-            185,
-            179,
-            175,
-            167,
-            161,
-            159,
-            154,
-            147,
-            141,
-            135,
-            128,
-            120,
-            108,
-            96,
-            84,
-            68,
-            45,
-            20,
-            16,
-            13,
-            10,
-            8,
-            5,
-            4,
-            3,
-            2,
-            1
-        )
-        fun create() = CnsList(Array(partialInspiratoryPressureOxygen.size) { no -> Cns(partialPressureOxygen = partialInspiratoryPressureOxygen[no], cnsPercentPerMinute = cnsPercentPerMinute[no], maximumDurationInMinutes = maximumDurationInMinutes[no]) })
-    }
+    fun calculateCnsPercentage(partialInspiratoryPressureOxygen : Double, duration: Double) = find(partialInspiratoryPressureOxygen) * duration
 }
