@@ -85,6 +85,7 @@ class Buehlmann(private val dive : Dive) {
             var metresNextDecoStopp = calculateNextDecompressionStop(stepLast.saturation)
             val gfCurrent           = if(stepLast.depthEnd > metresFirstDecoStopp) dive.gfLow else slope * stepLast.depthEnd + dive.gfHigh
 
+
             // if diver was sent to this stop to change gas
             if(isGasChangeStopp) {
                 val stepNew = Step(stepLast.depthEnd, stepLast.depthEnd, dive.minutesPerGasChange, bestGas)

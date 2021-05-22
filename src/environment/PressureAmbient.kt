@@ -21,5 +21,5 @@ internal class PressureAmbient(private val air: PressureAir, private val water: 
      *
      * @param depth Depth below water line in metres.
      */
-    fun getAmbientPressure(depth: Double) = air.pressure + water.pressure * (depth / 10)
+    fun getAmbientPressure(depth: Double) = air.pressure + water.pressure * (depth / 10.0)
 }
